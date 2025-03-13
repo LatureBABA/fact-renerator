@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Fact Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Random Fact Generator</h1>
+        <p id="fact">Click the button to get a random fact!</p>
+        <button onclick="getFact()">Get Fact</button>
+        <button onclick="speakFact()">🔊 Speak</button>
+    </div>
+
+    <script>
+        async function getFact() {
+            try {
+                let response = await fetch("https://uselessfacts.jsph.pl/random.json?language=en");
+                let data = await response.json();
+                document.getElementById("fact").textContent = data.text;
+            } catch (error) {
+                console.error("Error fetching fact:", error);
+                document.getElementById("fact").textContent = "Oops! Could not load a fact.";
+            }
+        }
+
+        function speakFact() {
+            let fact = document.getElementById("fact").textContent;
+            let speech = new SpeechSynthesisUtterance(fact);
+            speech.lang = "en-US";
+            speech.rate = 1;
+            speech.pitch = 1;
+            window.speechSynthesis.speak(speech);
+        }
+    </script>
+
+</body>
+</html>
